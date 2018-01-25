@@ -3,7 +3,6 @@ from steam import SteamClient
 from steam.enums import EResult
 
 client = SteamClient()
-client.set_credential_location('.')
 
 print("One-off login recipe")
 print("-"*20)
