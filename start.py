@@ -36,9 +36,9 @@ def download_wallpapers(game_title, gamecard_url, session):
     for div in soup.find_all("div", "badge_card_set_card owned"):
         zoom_div = div.find("div", "game_card_ctn with_zoom")
         onclick = zoom_div.attrs['onclick']
-        result = re.search(r'\".*\"', onclick).group(0)
-        card_title, escaped_url = result.replace('"', '').split(", ")
+        card_title, escaped_url = re.search(r'"(.*)", "(.*)"', onclick).groups(0)
         url = escaped_url.replace('\\', '')
+        card_title = card_title.replace('/', '-')
         image_request = session.get(url)
         print('Downloading "{}"'.format(card_title))
         filename = 'wallpapers/{} - {}.jpg'.format(game_title, card_title)
