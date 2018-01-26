@@ -25,8 +25,13 @@ print("Last logoff:", client.user.last_logoff)
 
 def download_wallpapers(game_title, gamecard_url, session):
     print('Downloading wallpapers from {} ({})'.format(game_title, gamecard_url))
-    response = session.get(gamecard_url)
-    soup = BeautifulSoup(response.content, 'html.parser')
+    while True:
+        response = session.get(gamecard_url)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        if 'There was an error getting trading card information.' in soup.text:
+            print('Error on badges page, retrying...')
+        else:
+            break
 
     for div in soup.find_all("div", "badge_card_set_card owned"):
         zoom_div = div.find("div", "game_card_ctn with_zoom")
