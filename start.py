@@ -1,5 +1,4 @@
-from __future__ import print_function
-
+import os
 import re
 
 from steam import SteamClient
@@ -36,11 +35,13 @@ def download_wallpapers(game_title, gamecard_url, session):
         card_title, escaped_url = result.replace('"', '').split(", ")
         url = escaped_url.replace('\\', '')
         image_request = session.get(url)
-        filename = '{} - {}.jpg'.format(game_title, card_title)
+        print('Downloading "{}"'.format(card_title))
+        filename = 'wallpapers/{} - {}.jpg'.format(game_title, card_title)
         with open(filename, 'wb') as img_file:
             for chunk in image_request:
                 img_file.write(chunk)
 
+os.makedirs('wallpapers/', exist_ok=True)
 session = client.get_web_session()
 badges_page_url = client.user.steam_id.community_url + '/badges'
 response = session.get(badges_page_url)
