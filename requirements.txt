@@ -1,5 +1,4 @@
 asn1crypto==0.24.0
-backports.shutil-get-terminal-size==1.0.0
 beautifulsoup4==4.6.0
 bs4==0.0.1
 certifi==2018.1.18
@@ -7,16 +6,15 @@ cffi==1.11.4
 chardet==3.0.4
 cryptography==2.1.4
 decorator==4.2.1
-enum34==1.1.6
 gevent==1.2.2
 gevent-eventemitter==2.0
 greenlet==0.4.12
 idna==2.6
-ipaddress==1.0.19
 ipdb==0.10.3
-ipython==5.5.0
+ipython==6.2.1
 ipython-genutils==0.2.0
-pathlib2==2.3.0
+jedi==0.11.1
+parso==0.1.1
 pexpect==4.3.1
 pickleshare==0.7.4
 prompt-toolkit==1.0.15
@@ -25,7 +23,6 @@ ptyprocess==0.5.2
 pycparser==2.18
 Pygments==2.2.0
 requests==2.18.4
-scandir==1.6
 simplegeneric==0.8.1
 six==1.11.0
 steam==0.8.23
