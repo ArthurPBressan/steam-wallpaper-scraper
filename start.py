@@ -42,7 +42,7 @@ def download_wallpapers(game_title, gamecard_url, session):
         card_title, escaped_url = re.search(r'"(.*)", "(.*)"', onclick)\
             .groups(0)
         url = escaped_url.replace('\\', '')
-        card_title = card_title.replace('/', '-')
+        card_title = utils.clean_card_title(card_title)
         image_request = session.get(url)
         print('Downloading "{}"'.format(card_title))
         filename = 'wallpapers/{} - {}.jpg'.format(game_title, card_title)
@@ -61,7 +61,8 @@ for row in badges_rows:
     a = row.find('a', 'badge_row_overlay')
     href = a.attrs['href']
     if 'gamecards' in href:
-        title = utils.clean(row.find('div', 'badge_title').contents[0])
+        title = row.find('div', 'badge_title').contents[0]
+        title = utils.clean_game_title(title)
         download_wallpapers(title, href, session)
     else:
         print('Skipping url {}'.format(href))
