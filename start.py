@@ -41,12 +41,20 @@ def download_wallpapers(game_title, gamecard_url, session):
         onclick = zoom_div.attrs['onclick']
         card_title, escaped_url = re.search(r'"(.*)", "(.*)"', onclick)\
             .groups(0)
+
         url = escaped_url.replace('\\', '')
+        _, ext = os.path.splitext(url)
         card_title = utils.clean_card_title(card_title)
-        image_request = session.get(url)
+        filename = '{} - {}{}'.format(game_title, card_title, ext)
+        path = 'wallpapers/{}'.format(filename)
+
+        if os.path.exists(path):
+            print('Skipping "{}"'.format(card_title))
+            continue
+
         print('Downloading "{}"'.format(card_title))
-        filename = 'wallpapers/{} - {}.jpg'.format(game_title, card_title)
-        with open(filename, 'wb') as img_file:
+        image_request = session.get(url)
+        with open(path, 'wb') as img_file:
             for chunk in image_request:
                 img_file.write(chunk)
 
