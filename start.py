@@ -5,6 +5,8 @@ from steam import SteamClient
 from steam.enums import EResult
 from bs4 import BeautifulSoup
 
+from scraper import utils
+
 client = SteamClient()
 
 print("One-off login recipe")
@@ -24,7 +26,8 @@ print("Last logoff:", client.user.last_logoff)
 
 
 def download_wallpapers(game_title, gamecard_url, session):
-    print('Downloading wallpapers from {} ({})'.format(game_title, gamecard_url))
+    print('Downloading wallpapers from {} ({})'
+          .format(game_title, gamecard_url))
     while True:
         response = session.get(gamecard_url)
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -36,7 +39,8 @@ def download_wallpapers(game_title, gamecard_url, session):
     for div in soup.find_all("div", "badge_card_set_card owned"):
         zoom_div = div.find("div", "game_card_ctn with_zoom")
         onclick = zoom_div.attrs['onclick']
-        card_title, escaped_url = re.search(r'"(.*)", "(.*)"', onclick).groups(0)
+        card_title, escaped_url = re.search(r'"(.*)", "(.*)"', onclick)\
+            .groups(0)
         url = escaped_url.replace('\\', '')
         card_title = card_title.replace('/', '-')
         image_request = session.get(url)
@@ -57,7 +61,7 @@ for row in badges_rows:
     a = row.find('a', 'badge_row_overlay')
     href = a.attrs['href']
     if 'gamecards' in href:
-        title = row.find('div', 'badge_title').contents[0].strip()
+        title = utils.clean(row.find('div', 'badge_title').contents[0])
         download_wallpapers(title, href, session)
     else:
         print('Skipping url {}'.format(href))
