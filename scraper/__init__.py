@@ -6,9 +6,11 @@ from tqdm import tqdm
 
 from scraper import utils
 
+default_dirname = 'wallpapers'
 
-def scrape(client):
-    os.makedirs('wallpapers/', exist_ok=True)
+
+def scrape(client, dir_name):
+    os.makedirs('{}/'.format(dir_name), exist_ok=True)
     session = client.get_web_session()
     badges_page_url = client.user.steam_id.community_url + '/badges'
     response = session.get(badges_page_url)
@@ -21,12 +23,12 @@ def scrape(client):
         if 'gamecards' in href:
             title = row.find('div', 'badge_title').contents[0]
             title = utils.clean_game_title(title)
-            download_wallpapers(title, href, session)
+            download_wallpapers(title, href, session, dir_name)
         else:
             print('Skipping url {}'.format(href))
 
 
-def download_wallpapers(game_title, gamecard_url, session):
+def download_wallpapers(game_title, gamecard_url, session, dir_name):
     print('Downloading wallpapers from {} ({})'
           .format(game_title, gamecard_url))
     while True:
@@ -47,7 +49,7 @@ def download_wallpapers(game_title, gamecard_url, session):
         _, ext = os.path.splitext(url)
         card_title = utils.clean_card_title(card_title)
         filename = '{} - {}{}'.format(game_title, card_title, ext)
-        path = 'wallpapers/{}'.format(filename)
+        path = '{}/{}'.format(dir_name, filename)
 
         if os.path.exists(path):
             print('Skipping "{}"'.format(card_title))

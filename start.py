@@ -1,3 +1,4 @@
+import click
 from steam import SteamClient
 from steam.enums import EResult
 
@@ -9,7 +10,10 @@ def _user_aborted():
     print('Aborted by user')
 
 
-def main():
+@click.command()
+@click.option('--dirname', default=scraper.default_dirname,
+              help='Directory name of where the wallpapers will be saved')
+def main(dirname):
     client = SteamClient()
 
     print("Steam Cards Wallpaper Downloader")
@@ -28,7 +32,7 @@ def main():
     print("Logged on as:", client.user.name)
 
     try:
-        scraper.scrape(client)
+        scraper.scrape(client, dirname)
     except KeyboardInterrupt:
         _user_aborted()
     finally:
